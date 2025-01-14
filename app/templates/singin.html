@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% block title %}Signin{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>Signin form </h2>
+            <hr>
+            <form action="" method="post">
+                {{ form.csrf_token }}
+
+                <div class="form-group">
+                  {{ form.email.label(class='form-control-label') }}
+                    {{ form.email(class='form-control', placeholder='enter email') }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class='form-control-label') }}
+                    {{ form.password(class='form-control', placeholder='enter password') }}
+                </div>
+<!--                <div class="form-group">-->
+<!--                    {{  form.recaptcha }}-->
+<!--                </div>-->
+                <div class="form-group">
+                    <input type="submit" value="sign in" class="form-control btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

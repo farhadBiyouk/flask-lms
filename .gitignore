@@ -1,0 +1,5 @@
+app.db
+migrations
+venv
+__pycache__/
+.idea/

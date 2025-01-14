@@ -1,0 +1,70 @@
+{% extends 'layout/base.html' %}
+{% block title %}Admin Panel {{ current_user.name }}{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">Settings</div>
+                <div class="card-body justify-content-center"></div>
+                <img class="mb-3"
+                     src=" {% if current_user.avatar %} {{  url_for('static' , filename= current_user.avatar) }} {% else %} {{  url_for('static' , filename= '/img/profile.png' ) }} {% endif %} "
+                     alt="">
+
+                <b class="text-center">{{ current_user.name }}</b>
+                <hr>
+                <ul class="list-group text-center">
+                  <li class="list-group-item"><a href="{{ url_for('users.edit_profile') }}">Edit profile</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('users.upload_avatar') }}">Edit avatar</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('users.change_password') }}">Change password</a>
+                    </li>
+                    <li class="list-group-item"><a href="{{ url_for('users.add_new_user') }}">Add user</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('users.get_all_users') }}">List user</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('users.add_new_course') }}">Add course</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('user.all_courses') }}">List course</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('user.all_courses') }}">Add category</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('user.all_courses') }}">List category</a></li>
+                    <li class="list-group-item "><a href="{{ url_for('users.logout') }}" class="btn btn-danger w-100">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="card">
+                <div class="card-header">Content</div>
+                <div class="card-body">
+                    <h4 class="mb-4">create new user</h4>
+                      <form action="" method="post">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.name.label(class='form-control-label') }}
+                    {{ form.name(class='form-control', placeholder='enter name') }}
+                </div>
+                <div class="form-group">
+                  {{ form.email.label(class='form-control-label') }}
+                    {{ form.email(class='form-control', placeholder='enter email') }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class='form-control-label') }}
+                    {{ form.password(class='form-control', placeholder='enter password') }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class='form-control-label') }}
+                    {{ form.confirm_password(class='form-control', placeholder='enter confirm password') }}
+                </div>
+                <div class="form-group">
+                    {{  form.recaptcha }}
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="create" class="form-control btn btn-primary">
+                </div>
+            </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

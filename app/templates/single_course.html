@@ -1,0 +1,116 @@
+{% extends 'layout/base.html' %}
+{% block title %}Single{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-3 ml-2">
+            <hr>
+            <div class="card">
+                <div class="card-header">Payment</div>
+                <div class="card-body">
+                    <span class="btn btn-dark btn-lg w-75 mt-4">{{ course.price | comma_number }}</span>
+                    <hr>
+                    {% if current_user.is_authenticated %}
+
+                    <form action="{{ url_for('users.add_to_basket') }}" method="post">
+                        <input type="hidden" name="course_id" value="{{ course.id }}">
+                        <input type="hidden" name="slug" value="{{ course.slug }}">
+                        {% if current_user.id | string not in course.students | string %}
+                        <button class="btn btn-success w-75 ">add to basket</button>
+                        {% else %}
+                        <span>you are student for course</span>
+                        {% endif %}
+                    </form>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <hr>
+            <div class="card" style="width:800px;">
+
+                <img class="card-img-top" src="{{ url_for('static', filename=course.image) }}" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">{{ course.title }}</h5>
+                    <p class="card-text"> {{ course.content }}</p>
+                    <small class="card-text">{{ course.get_teacher(course.user_id) }}</small>
+                    <small class="card-text">{{ course.date_created }}</small>
+                    <a href="{{  url_for('users.add_episode') }}" class="btn btn-primary" style="float:right">Add new
+                        episode</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5 mb-5">
+        <div class="col-md-3 ">
+
+        </div>
+        <div class="col-md-8">
+            <ul class="list-group">
+                {% for cour in course.episodes %}
+                {% if current_user.id | string in course.students | string or course.user_id == current_user.id %}
+                <li class="list-group-item" style="width:800px;"><a
+                        href="{{ url_for('users.get_episode', course_id=course.id ,ep_id=cour.id) }}">
+                    {{ cour.title }}</a>
+                    {% else %}
+                <li class="list-group-item" style="width:800px;">
+                    {{ cour.title }}
+                    {% endif %}
+
+                    <ul class="navbar-nav  my-2 my-lg-0  mr-auto">
+                        {% if course.user_id == current_user.id %}
+                        <li class="mb-3 mt-3"><a href="{{ url_for('users.add_episode') }}"
+                                                 class="btn btn-primary">add new episode</a></li>
+                        <li class="mb-3"><a
+                                href="{{ url_for('users.edit_episode' , course_id=course.id, ep_id=cour.id) }}"
+                                class="btn btn-warning">edit</a></li>
+                        <li class="mb-3"><a
+                                href="{{ url_for('users.del_episode' , course_id=course.id, ep_id=cour.id) }}"
+                                class="btn btn-danger">Del</a>
+                        </li>
+
+                        {% endif %}
+                    </ul>
+
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-3 ">
+
+        </div>
+        <div class="col-md-8">
+            <form action="{{ url_for('users.create_comment', course_id=course.id) }}" method="post" class="w-100">
+                <h3>create comment</h3>
+                <div class="form-group">
+                    <textarea class="form-control " name="text" rows="10"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-info" type="submit">send</button>
+                </div>
+            </form>
+            <hr>
+            {% if comments %}
+            <div class="card">
+                <div class="card-body">
+                    {% for comment in comments %}
+                    <div class="commentlist mt-5 mb-3">
+
+                        <p>{{ comment.text }}</p><br>
+                        <small>posted by: {{ comment.user.name }}</small> - <small>{{ comment.created_at }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            not yet comment
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
